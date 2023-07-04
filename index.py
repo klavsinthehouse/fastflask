@@ -11,25 +11,15 @@ def predict():
     img_data = requests.get(image_url).content
     img = PILImage.create(img_data)
     prediction = learn.predict(img)[0]
-    response = {
-            'fulfillmentMessages': [
-                {
-                    'text': {
-                        'text': ['Your response message']
-                    }
-                }
-            ],
-            'outputContexts': [
-                {
-                    'name': request['session'] + '/contexts/your_context_name',
-                    'lifespanCount': 5,
-                    'parameters': {
-                        'appliance': prediction
-                    }
-                }
-            ]
-        }
-    return jsonify({"prediction": str(prediction)})
+   
+    json_response = {
+        "sessionInfo": {
+            "parameters": {
+                "appliance": prediction,
+            },
+        },
+    } 
+    return jsonify(json_response)
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
